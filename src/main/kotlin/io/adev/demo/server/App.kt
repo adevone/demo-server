@@ -18,6 +18,7 @@ import kotlinx.serialization.json.Json
 import org.postgresql.ds.PGSimpleDataSource
 import java.io.File
 
+
 fun main() {
 
     val ds = PGSimpleDataSource()
@@ -41,6 +42,11 @@ fun main() {
             })
         }
         routing {
+            get("feed") {
+                val offset = call.parameters["offset"]?.toLongOrNull()
+                val limit = call.parameters["limit"]?.toLongOrNull()
+                call.respond(MockFeedRepository.getFeed(limit, offset))
+            }
             get("news") {
                 val offset = call.parameters["offset"]?.toLongOrNull()?.takeIf { it > 0 }
                 val news = repository.getNews(offset)
