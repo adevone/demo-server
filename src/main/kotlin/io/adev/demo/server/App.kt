@@ -41,7 +41,10 @@ fun main() {
 
     embeddedServer(Netty, port = 8089) {
         install(ContentNegotiation) {
-            json()
+            json(Json {
+                ignoreUnknownKeys = true
+                encodeDefaults = false
+            })
         }
         routing {
             get("news") {

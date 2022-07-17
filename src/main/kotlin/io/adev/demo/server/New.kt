@@ -5,11 +5,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class New(
     val id: String,
-    val isHot: Boolean,
+    val isHot: Boolean = false,
     val source: String,
     val sourceIconUrl: String,
     val subscribers: String,
-    val isSubscribed: Boolean,
+    val isSubscribed: Boolean = false,
     val photoUrl: String,
     val title: String,
     val textPreview: String,
