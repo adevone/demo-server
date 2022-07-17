@@ -4,8 +4,11 @@ import app.cash.sqldelight.driver.jdbc.asJdbcDriver
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
+import io.ktor.request.receive
 import io.ktor.response.respond
+import io.ktor.response.respondText
 import io.ktor.routing.get
+import io.ktor.routing.post
 import io.ktor.routing.routing
 import io.ktor.serialization.json
 import io.ktor.server.engine.embeddedServer
@@ -28,16 +31,7 @@ fun main() {
     val database = Database(driver)
     Database.Schema.create(driver)
 
-    val newsRepository = NewsRepository(database)
-    try {
-        val initNewsText = File("init_news.json").readText()
-        val initNews = Json.decodeFromString(ListSerializer(New.serializer()), initNewsText)
-        initNews.forEach { new ->
-            newsRepository.insert(new)
-        }
-    } catch (e: Exception) {
-        println("Can not insert default news")
-    }
+    val repository = Repository(database)
 
     embeddedServer(Netty, port = 8089) {
         install(ContentNegotiation) {
@@ -48,8 +42,49 @@ fun main() {
         }
         routing {
             get("news") {
-                val news = newsRepository.all()
-                call.respond(news)
+                val offset = call.parameters["offset"]?.toLongOrNull()?.takeIf { it > 0 }
+                val news = repository.getNews(offset)
+                call.respond(NewsResponse(news))
+            }
+            post("add-source") {
+                val source = call.receive<Source>()
+                repository.insertSource(source)
+                call.respondText("")
+            }
+            post("add-new") {
+                val addNew = call.receive<AddNew>()
+                repository.insertNew(addNew)
+                call.respondText("")
+            }
+            post("add-like") {
+                val newId = call.parameters["newId"]!!
+                repository.addLike(newId)
+                call.respondText("")
+            }
+            post("remove-like") {
+                val newId = call.parameters["newId"]!!
+                repository.removeLike(newId)
+                call.respondText("")
+            }
+            post("add-dislike") {
+                val newId = call.parameters["newId"]!!
+                repository.addDislike(newId)
+                call.respondText("")
+            }
+            post("remove-dislike") {
+                val newId = call.parameters["newId"]!!
+                repository.removeDislike(newId)
+                call.respondText("")
+            }
+            post("subscribe") {
+                val sourceId = call.parameters["newId"]!!
+                repository.subscribe(sourceId)
+                call.respondText("")
+            }
+            post("unsubscribe") {
+                val sourceId = call.parameters["newId"]!!
+                repository.unsubscribe(sourceId)
+                call.respondText("")
             }
         }
     }.start(wait = true)

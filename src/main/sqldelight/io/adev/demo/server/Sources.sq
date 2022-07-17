@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS sources
+(
+    id varchar NOT NULL PRIMARY KEY,
+    title varchar NOT NULL,
+    icon_url varchar NOT NULL
+);
+
+insert:
+INSERT INTO sources (id, title, icon_url)
+VALUES (?, ?, ?);
+
+get:
+SELECT * FROM sources
+WHERE id = ?;

@@ -27,6 +27,6 @@ sqldelight {
     database("Database") {
         // This will be the name of the generated database class.
         packageName = "io.adev.demo.server"
-        dialect = "app.cash.sqldelight:postgresql-dialect:${libs.versions.sqlDelight.get()}"
+        dialect("app.cash.sqldelight:postgresql-dialect:${libs.versions.sqlDelight.get()}")
     }
 }

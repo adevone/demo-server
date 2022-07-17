@@ -1,0 +1,17 @@
+CREATE TABLE IF NOT EXISTS dislikes
+(
+    id varchar NOT NULL PRIMARY KEY,
+    new_id varchar NOT NULL REFERENCES news ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+add:
+INSERT INTO dislikes (id, new_id)
+VALUES (?, ?);
+
+remove:
+DELETE FROM dislikes
+WHERE new_id = ?;
+
+get:
+SELECT * FROM dislikes
+WHERE new_id = ?;

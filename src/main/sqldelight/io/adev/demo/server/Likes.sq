@@ -1,0 +1,17 @@
+CREATE TABLE IF NOT EXISTS likes
+(
+    id varchar NOT NULL PRIMARY KEY,
+    new_id varchar NOT NULL REFERENCES news ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+add:
+INSERT INTO likes (id, new_id)
+VALUES (?, ?);
+
+remove:
+DELETE FROM likes
+WHERE new_id = ?;
+
+get:
+SELECT * FROM likes
+WHERE new_id = ?;

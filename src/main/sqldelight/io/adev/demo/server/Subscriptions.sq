@@ -1,0 +1,17 @@
+CREATE TABLE IF NOT EXISTS subscriptions
+(
+    id varchar NOT NULL PRIMARY KEY,
+    source_id varchar NOT NULL REFERENCES sources ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+add:
+INSERT INTO subscriptions (id, source_id)
+VALUES (?, ?);
+
+remove:
+DELETE FROM subscriptions
+WHERE source_id = ?;
+
+get:
+SELECT * FROM subscriptions
+WHERE source_id = ?;

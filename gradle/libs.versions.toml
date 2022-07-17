@@ -2,7 +2,7 @@
 
 kotlin = "1.6.10"
 ktor = "1.6.7"
-sqlDelight = "2.0.0-alpha01"
+sqlDelight = "2.0.0-alpha03"
 
 [libraries]
 
