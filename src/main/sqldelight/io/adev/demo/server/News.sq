@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS news
+(
+    id varchar NOT NULL PRIMARY KEY,
+    is_hot integer NOT NULL,
+    source_title varchar NOT NULL,
+    source_icon_url varchar NOT NULL,
+    subscribers varchar NOT NULL,
+    is_subscribed integer NOT NULL,
+    photo_url varchar NOT NULL,
+    title varchar NOT NULL,
+    text_preview varchar NOT NULL,
+    published_time varchar NOT NULL
+);
+
+insert:
+INSERT INTO news (id, is_hot, source_title, source_icon_url, subscribers, is_subscribed, photo_url, title, text_preview, published_time)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+all:
+SELECT * FROM news;
