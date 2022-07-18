@@ -4,6 +4,7 @@ import app.cash.sqldelight.driver.jdbc.asJdbcDriver
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
+import io.ktor.http.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
@@ -45,7 +46,11 @@ fun main() {
             get("feed") {
                 val offset = call.parameters["offset"]?.toLongOrNull()
                 val limit = call.parameters["limit"]?.toLongOrNull()
-                call.respond(MockFeedRepository.getFeed(limit, offset))
+                if (offset != null && offset > 10) {
+                    call.respondText("No content", status = HttpStatusCode.NotFound)
+                } else {
+                    call.respond(MockFeedRepository.getFeed(limit, offset))
+                }
             }
             get("news") {
                 val offset = call.parameters["offset"]?.toLongOrNull()?.takeIf { it > 0 }
